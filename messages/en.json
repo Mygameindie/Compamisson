@@ -35,7 +35,13 @@
     "haveAccount": "Already have an account?",
     "loginLink": "Log in",
     "checkEmailTitle": "Check your email",
-    "checkEmailBody": "We sent a confirmation link to {email}. Click it to finish creating your account."
+    "checkEmailBody": "We sent a confirmation link to {email}. Click it to finish creating your account.",
+    "resendConfirmation": "Resend confirmation email",
+    "resendingConfirmation": "Sending…",
+    "confirmationResent": "A new confirmation email was sent. Use the newest link only.",
+    "confirmationExpired": "That confirmation link expired. Enter your email below and request a new one.",
+    "confirmationFailed": "The confirmation link is invalid. Enter your email below and request a new one.",
+    "enterEmailToResend": "Enter your email address first."
   },
   "onboarding": {
     "title": "Set up your profile",
