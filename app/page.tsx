@@ -1,15 +1,7 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function LandingPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) redirect("/feed");
-
   const t = await getTranslations("landing");
   const features = ["feature1", "feature2", "feature3"] as const;
 
