@@ -6,6 +6,8 @@ Three phases. Each phase ends with something real users can use. Estimates assum
 
 **Goal:** one artist and one customer can go from discovery to a completed, paid, recorded commission without leaving the site.
 
+> **Progress:** milestones 1–4 are built, plus the payment-methods part of milestone 6 (artists show their PromptPay QR / PayPal / bank details on their profile). Next up: milestone 5 (the commission workflow) and the structured pay-with-slip flow.
+
 | # | Milestone | Contents | ~Size |
 |---|-----------|----------|-------|
 | 1 | Foundation | Next.js + TypeScript + Tailwind + next-intl scaffold (TH/EN), Supabase project, auth (email + Google), `profiles` table + trigger, settings page, CI (lint/typecheck/test) | 1.5 wk |

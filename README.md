@@ -30,4 +30,14 @@ Today most artists take commissions over Twitter/X DMs, Discord, or Facebook —
 
 ## Status
 
-📋 **Planning stage.** No code yet — these documents define what gets built first. See the [roadmap](docs/07-roadmap.md).
+🚧 **First version built.** Accounts, profiles with payment methods (PromptPay QR / PayPal / bank), the social feed (posts, likes, comments, follows), and realtime chat are working. The commission order workflow (request → quote → pay → deliver) is next — see the [roadmap](docs/07-roadmap.md).
+
+**👉 To get your copy running, follow [SETUP.md](SETUP.md)** — about 20 minutes with free Supabase and Netlify accounts.
+
+## Running locally
+
+```bash
+npm install
+cp .env.example .env.local   # fill in your Supabase URL + anon key (see SETUP.md)
+npm run dev                  # http://localhost:3000
+```
