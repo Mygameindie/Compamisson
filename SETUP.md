@@ -90,7 +90,8 @@ npm run dev                    # open http://localhost:3000
 
 | Problem | Fix |
 |---------|-----|
-| "Invalid API key" or endless loading | The two environment variables in Netlify are missing or have typos. Fix them, then trigger a new deploy (Deploys → Trigger deploy). |
+| Site shows the "Almost there!" setup page, or an error about "URL and Key are required to create a Supabase client" | The two environment variables aren't set in Netlify. Do Part 1 to get the values, add them in **Site configuration → Environment variables**, then **Deploys → Trigger deploy → Clear cache and deploy site** (clearing the cache matters — the values are baked in at build time). |
+| "Invalid API key" or endless loading | The two environment variables in Netlify have typos or the wrong values (use the `anon` `public` key, not `service_role`). Fix them, then trigger a new deploy with cleared cache as above. |
 | Sign-up says "Email not confirmed" | Part 1 step 7 — turn off Confirm email, or check the inbox for the confirmation link. |
 | Images don't upload | Make sure the SQL script ran completely (it creates the `public-media` storage bucket at the end). Check Storage in the Supabase dashboard — you should see a `public-media` bucket. |
 | Chat doesn't update live | In Supabase go to **Database → Replication** and confirm `messages` is in the `supabase_realtime` publication (the SQL script adds it, but it's worth checking). |

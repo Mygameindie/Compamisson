@@ -4,6 +4,18 @@ import { NextResponse, type NextRequest } from "next/server";
 // Refreshes the Supabase auth session cookie on every request so server
 // components always see a valid session. Page-level guards live in layouts.
 export async function proxy(request: NextRequest) {
+  // Not connected to Supabase yet (fresh deploy without env vars):
+  // send every route to the friendly setup page instead of crashing.
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    if (request.nextUrl.pathname === "/setup") {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL("/setup", request.url));
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
