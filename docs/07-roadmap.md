@@ -53,11 +53,11 @@ Three phases. Each phase ends with something real users can use. Estimates assum
 | Cold start (no artists → no customers) | Seed with invited Thai artist community; social feed gives artists a reason to post before orders arrive; profile is shareable as a link-in-bio replacement |
 | Fake payment slips | Artist is always the confirmation authority; timeline evidence; phase-2 slip-verification API; phase-3 escrow removes the problem |
 | Scope creep in MVP | Anything not in the Phase-1 table waits; the state machine + timeline is the only genuinely hard part — protect time for it |
-| Free-tier limits (Supabase/Vercel) | Fine for beta; first paid tier (~$25/mo Supabase) only when Realtime connections or storage demand it |
+| Free-tier limits (Supabase/Netlify) | Fine for beta; first paid tier (~$25/mo Supabase) only when Realtime connections or storage demand it |
 | Content policy issues (sensitive art) | Sensitive flag + blur in v1; written content policy before opening registration beyond invites |
 
 ## Immediate next steps (next working session)
 
 1. Scaffold milestone 1 (Next.js + Supabase + i18n + CI) on a new branch.
 2. Write the first migration: `profiles` + auth trigger + RLS.
-3. Register the Supabase project and Vercel project; wire preview deploys.
+3. Register the Supabase project and Netlify site; add `netlify.toml` + the Next.js runtime plugin and wire Deploy Previews.

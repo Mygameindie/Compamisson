@@ -17,12 +17,12 @@ Today most artists take commissions over Twitter/X DMs, Discord, or Facebook —
 | [03 — User Flows](docs/03-user-flows.md) | Step-by-step journeys for the key scenarios |
 | [04 — Data Model](docs/04-data-model.md) | Database schema (Supabase/Postgres) with relations and RLS notes |
 | [05 — Payments](docs/05-payments.md) | Direct-payment flow, proof of payment, disputes, future escrow path |
-| [06 — Tech Stack](docs/06-tech-stack.md) | Architecture: Next.js, Supabase, Vercel, i18n, image handling |
+| [06 — Tech Stack](docs/06-tech-stack.md) | Architecture: Next.js, Supabase, Netlify, i18n, image handling |
 | [07 — Roadmap](docs/07-roadmap.md) | Phased build plan: MVP → v1 → v2 |
 
 ## Tech at a glance
 
-- **Frontend + backend:** Next.js (App Router) on Vercel
+- **Frontend + backend:** Next.js (App Router) on Netlify
 - **Auth, database, storage, realtime chat:** Supabase
 - **Languages:** Thai + English (next-intl)
 - **Payments (phase 1):** direct transfer — PromptPay QR, PayPal.me, bank transfer — with slip upload as proof

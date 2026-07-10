@@ -5,7 +5,7 @@
 | Layer | Choice | Why |
 |-------|--------|-----|
 | Framework | **Next.js (App Router, TypeScript)** | One codebase for UI + API route handlers; SSR for public profiles/posts (SEO for artist discovery); huge ecosystem |
-| Hosting | **Vercel** | Zero-ops deploys from GitHub, free tier fits MVP, edge caching for public pages |
+| Hosting | **Netlify** | Zero-ops deploys from GitHub via the official Next.js runtime (`@netlify/plugin-nextjs`), free tier fits MVP, Deploy Previews per PR, CDN caching for public pages |
 | Auth | **Supabase Auth** | Email + Google OAuth out of the box; session handling via `@supabase/ssr` |
 | Database | **Supabase Postgres + RLS** | Relational fits commissions/payments; RLS gives defense-in-depth for private data (payment methods, chats, slips) |
 | Storage | **Supabase Storage** | Public bucket for media, private buckets for slips and deliverables, policy-scoped access |
@@ -15,7 +15,7 @@
 | Forms/validation | **react-hook-form + zod** | Zod schemas shared between client forms and route-handler validation |
 | Email | **Resend** (v1) | Transactional notifications; free tier to start |
 | Testing | **Vitest** (unit) + **Playwright** (e2e) | Playwright is pre-provisioned in this dev environment |
-| CI | **GitHub Actions** | Lint, typecheck, test on PR; Vercel preview deploys per branch |
+| CI | **GitHub Actions** | Lint, typecheck, test on PR; Netlify Deploy Previews per PR/branch |
 
 ## Architecture principles
 
@@ -52,8 +52,32 @@ compamisson/
 ├── supabase/
 │   ├── migrations/                 # SQL migrations (Supabase CLI)
 │   └── seed.sql                    # dev seed data
-└── e2e/                            # Playwright specs
+├── e2e/                            # Playwright specs
+└── netlify.toml                    # build config for Netlify
 ```
+
+## Netlify specifics
+
+Next.js App Router runs on Netlify through the official **`@netlify/plugin-nextjs`** runtime — SSR and route handlers become Netlify Functions, and `middleware.ts` (which next-intl uses for locale routing) runs on Netlify Edge Functions. All of this is automatic; no code changes versus any other host.
+
+`netlify.toml`:
+
+```toml
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+```
+
+Things to know:
+
+- **Image optimization:** `next/image` is served through the **Netlify Image CDN** automatically. Add the Supabase Storage hostname (`<project>.supabase.co`) to `images.remotePatterns` in `next.config.ts` so post images and avatars are allowed.
+- **Function limits:** synchronous Netlify Functions have a ~10 s execution cap on the free tier — fine for our route handlers (state transitions, signed-URL minting are fast). Keep image compression client-side (already the plan) so uploads never run through a function.
+- **Realtime chat is unaffected:** Supabase Realtime is a direct websocket from the browser to Supabase; Netlify is not in that path.
+- **Deploy contexts:** use `[context.deploy-preview]` / `[context.branch-deploy]` blocks in `netlify.toml` (or UI-scoped env vars) to point previews at the staging Supabase project, never production.
+- **Scheduled jobs** (v1 auto-nudges, review auto-publish timers): Netlify **Scheduled Functions** cover this — no extra service needed.
 
 ## Images & files
 
@@ -73,10 +97,10 @@ compamisson/
 | Env | Supabase project | Deploy |
 |-----|------------------|--------|
 | Local dev | `supabase start` (local Docker) or a dev project | `next dev` |
-| Staging | dedicated project | Vercel preview (main branch) |
-| Production | dedicated project | Vercel production |
+| Staging | dedicated project | Netlify branch deploy (`main` branch) + Deploy Previews per PR |
+| Production | dedicated project | Netlify production deploy (from a `production` branch or manual promote) |
 
-Secrets in Vercel env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server-only), `RESEND_API_KEY` (v1). Service-role key must never be imported in client components — enforce with ESLint rule (`no-restricted-imports` on the server client from client files).
+Secrets in Netlify env vars (Site settings → Environment variables, scoped per deploy context so staging and production point at different Supabase projects): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server-only), `RESEND_API_KEY` (v1). Service-role key must never be imported in client components — enforce with ESLint rule (`no-restricted-imports` on the server client from client files).
 
 ## Scale posture
 
